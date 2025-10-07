@@ -5,13 +5,17 @@ from parking_spot import ParkingSpot
 
 
 class ParkingTicket:
-    def __init__(self, vehicle: Vehicle, spot: ParkingSpot):
-        self.ticket_id = str(uuid.uuid4())
-        self.vehicle = vehicle
-        self.spot = spot
-        self.entry_timestamp = int(time.time() * 1000)
-        self.exit_timestamp = 0
+    """Represents a ticket issued to a vehicle upon entering the parking lot."""
 
+    def __init__(self, vehicle: Vehicle, spot: ParkingSpot):
+        """Initializes a new ticket with a unique ID, vehicle/spot info, and entry time."""
+        self.ticket_id = str(uuid.uuid4())  # Generate a unique ID for the ticket
+        self.vehicle = vehicle  # The vehicle associated with this ticket
+        self.spot = spot  # The spot where the vehicle is parked
+        self.entry_timestamp = int(time.time())  # Store entry time as a Unix timestamp
+        self.exit_timestamp = 0  # Exit time is 0 until the vehicle unparks
+
+    # Getter methods for ticket attributes
     def get_ticket_id(self) -> str:
         return self.ticket_id
 
@@ -28,4 +32,5 @@ class ParkingTicket:
         return self.exit_timestamp
 
     def set_exit_timestamp(self):
-        self.exit_timestamp = int(time.time() * 1000)
+        """Sets the exit timestamp to the current time."""
+        self.exit_timestamp = int(time.time())
