@@ -33,7 +33,7 @@ The design is built upon the following core classes, interfaces, and enumeration
 | **`ParkingSpot`** | Class          | Represents an individual parking space. Tracks its current **availability** status and the specific **`Vehicle`** currently occupying it.                           |
 | **`Vehicle`**     | Abstract Class | The base class for all vehicle types. Provides common properties (e.g., license plate) and is extended for specific vehicle types.                                  |
 | **`Car`**         | Subclass       | Concrete implementation of a vehicle requiring a standard (medium) spot.                                                                                            |
-| **`Motorcycle`**  | Subclass       | Concrete implementation of a vehicle requiring a small spot.                                                                                                        |
+| **`Bike`**        | Subclass       | Concrete implementation of a vehicle requiring a small spot.                                                                                                        |
 | **`Truck`**       | Subclass       | Concrete implementation of a vehicle requiring a large spot.                                                                                                        |
 | **`Main`**        | Class          | Contains the application entry point to demonstrate the initialization and operational usage of the `ParkingLot` system.                                            |
 
@@ -53,7 +53,7 @@ The design utilizes the **Singleton Pattern** for the **`ParkingLot`** class.
 
 ### Concurrency Strategy
 
-To meet the requirement for thread-safe operations from multiple gates, **multi-threading is achieved through the use of the `synchronized` keyword on critical sections** (e.g., methods that modify spot availability counts or assign/release a `ParkingSpot`).
+To meet the requirement for thread-safe operations from multiple gates, **multi-threading is achieved through the use of the `locks` on critical sections** (e.g., methods that modify spot availability counts or assign/release a `ParkingSpot`).
 
 This ensures that:
 
