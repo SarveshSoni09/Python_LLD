@@ -1,19 +1,18 @@
-from datetime import date
-import uuid
+from datetime import datetime
 
 
 class Comment:
-    def __init__(self, content, author):
-        self.id = str(uuid.uuid4())
+    def __init__(self, comment_id, content, author):
+        self.id = comment_id
         self.content = content
         self.author = author
-        self.creation_date = date.today()
+        self.creation_date = datetime.now()
 
-    def get_id(self) -> str:
-        return self.id
+    # def get_id(self) -> str:
+    #     return self.id
 
-    def get_author(self) -> str:
-        return self.author
+    # def get_author(self) -> str:
+    #     return self.author
 
-    def get_content(self) -> str:
-        return self.content
+    # def get_content(self) -> str:
+    #     return self.content
