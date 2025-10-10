@@ -1,5 +1,6 @@
 from vehicle import Vehicle
 from vehicle_size import VehicleSize
+import threading
 
 
 class ParkingSpot:
@@ -8,6 +9,7 @@ class ParkingSpot:
         self.spot_size = spot_size
         self.is_occupied = False
         self.parked_vehicle = None
+        self._lock = threading.Lock()
 
     def get_spot_id(self) -> str:
         return self.spot_id
@@ -16,18 +18,21 @@ class ParkingSpot:
         return self.spot_size
 
     def is_available(self) -> bool:
-        return not self.is_occupied
+        with self._lock:
+            return not self.is_occupied
 
     def is_occupied_spot(self) -> bool:
         return self.is_occupied
 
     def park_vehicle(self, vehicle: Vehicle):
-        self.parked_vehicle = vehicle
-        self.is_occupied = True
+        with self._lock:
+            self.parked_vehicle = vehicle
+            self.is_occupied = True
 
     def unpark_vehicle(self):
-        self.parked_vehicle = None
-        self.is_occupied = False
+        with self._lock:
+            self.parked_vehicle = None
+            self.is_occupied = False
 
     def can_fit_vehicle(self, vehicle: Vehicle) -> bool:
         if self.is_occupied:

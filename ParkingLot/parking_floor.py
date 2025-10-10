@@ -1,4 +1,5 @@
 # Import necessary classes and type hints
+import threading
 from parking_spot import ParkingSpot
 from vehicle import Vehicle
 from vehicle_size import VehicleSize
@@ -15,6 +16,7 @@ class ParkingFloor:
         self.spots: Dict[str, ParkingSpot] = (
             {}
         )  # A dictionary to hold spots, keyed by spot ID
+        self._lock = threading.Lock()
 
     def add_spot(self, spot: ParkingSpot):
         """Adds a parking spot to this floor."""
@@ -26,18 +28,19 @@ class ParkingFloor:
         It prioritizes the smallest possible spot that the vehicle can fit in.
         """
         # Filter for spots that are not occupied and can fit the vehicle
-        available_spots = [
-            spot
-            for spot in self.spots.values()
-            if not spot.is_occupied_spot() and spot.can_fit_vehicle(vehicle)
-        ]
+        with self._lock:
+            available_spots = [
+                spot
+                for spot in self.spots.values()
+                if not spot.is_occupied_spot() and spot.can_fit_vehicle(vehicle)
+            ]
 
-        if available_spots:
-            # Sort the fitting spots by size (SMALL -> MEDIUM -> LARGE) to find the "best fit"
-            available_spots.sort(key=lambda x: x.get_spot_size().value)
-            return available_spots[0]  # Return the smallest fitting spot
+            if available_spots:
+                # Sort the fitting spots by size (SMALL -> MEDIUM -> LARGE) to find the "best fit"
+                available_spots.sort(key=lambda x: x.get_spot_size().value)
+                return available_spots[0]  # Return the smallest fitting spot
 
-        return None  # Return None if no suitable spot is found on this floor
+            return None  # Return None if no suitable spot is found on this floor
 
     def display_availability(self):
         """Prints a summary of available spots on this floor, grouped by size."""

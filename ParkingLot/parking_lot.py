@@ -5,6 +5,7 @@ from fee_strategy import FeeStrategy, FlatRateFeeStrategy
 from parking_strategy import ParkingStrategy, NearestFirstStrategy
 from vehicle import Vehicle
 from typing import List, Dict, Optional
+import threading
 
 
 class ParkingLot:
@@ -15,6 +16,7 @@ class ParkingLot:
 
     # Private class variable to hold the single instance
     _instance = None
+    _lock = threading.Lock()
 
     def __init__(self):
         """
@@ -35,6 +37,7 @@ class ParkingLot:
         self.parking_strategy: ParkingStrategy = (
             NearestFirstStrategy()
         )  # Default spot-finding strategy
+        self._main_lock = threading.Lock()
 
     @staticmethod
     def get_instance():
@@ -43,7 +46,9 @@ class ParkingLot:
         Creates the instance if it doesn't exist yet.
         """
         if ParkingLot._instance is None:
-            ParkingLot._instance = ParkingLot()
+            with ParkingLot._lock:
+                if ParkingLot._instance is None:
+                    ParkingLot._instance = ParkingLot()
         return ParkingLot._instance
 
     def add_floor(self, floor: ParkingFloor):
@@ -64,22 +69,23 @@ class ParkingLot:
         parks the vehicle, and issues a ticket.
         Returns the ticket on success, None on failure.
         """
-        # Delegate the task of finding a spot to the current strategy object
-        spot = self.parking_strategy.find_spot(self.floors, vehicle)
-        if spot is not None:
-            spot.park_vehicle(vehicle)  # Occupy the spot
-            # Create a new ticket for this parking session
-            ticket = ParkingTicket(vehicle, spot)
-            self.activeTickets[vehicle.get_license_number()] = (
-                ticket  # Store the active ticket
-            )
-            print(
-                f"Vehicle {vehicle.get_license_number()} parked at spot {spot.get_spot_id()}"
-            )
-            return ticket
-        else:
-            print(f"No available spot for vehicle {vehicle.get_license_number()}")
-            return None
+        with self._main_lock:
+            # Delegate the task of finding a spot to the current strategy object
+            spot = self.parking_strategy.find_spot(self.floors, vehicle)
+            if spot is not None:
+                spot.park_vehicle(vehicle)  # Occupy the spot
+                # Create a new ticket for this parking session
+                ticket = ParkingTicket(vehicle, spot)
+                self.activeTickets[vehicle.get_license_number()] = (
+                    ticket  # Store the active ticket
+                )
+                print(
+                    f"Vehicle {vehicle.get_license_number()} parked at spot {spot.get_spot_id()}"
+                )
+                return ticket
+            else:
+                print(f"No available spot for vehicle {vehicle.get_license_number()}")
+                return None
 
     def unpark_vehicle(self, license_number: str) -> Optional[float]:
         """
@@ -87,18 +93,19 @@ class ParkingLot:
         and frees the spot.
         Returns the calculated fee on success, None if the ticket is not found.
         """
-        # Remove the ticket from active tickets; returns None if not found
-        ticket = self.activeTickets.pop(license_number, None)
-        if ticket is None:
-            print(f"Ticket not found for vehicle {license_number}")
-            return None
+        with self._main_lock:
+            # Remove the ticket from active tickets; returns None if not found
+            ticket = self.activeTickets.pop(license_number, None)
+            if ticket is None:
+                print(f"Ticket not found for vehicle {license_number}")
+                return None
 
-        ticket.get_spot().unpark_vehicle()  # Free up the parking spot
-        ticket.set_exit_timestamp()  # Record the exit time
+            ticket.get_spot().unpark_vehicle()  # Free up the parking spot
+            ticket.set_exit_timestamp()  # Record the exit time
 
-        # Delegate fee calculation to the current fee strategy object
-        fee = self.fee_strategy.calculate_fee(ticket)
-        print(
-            f"Vehicle {license_number} unparked from spot {ticket.get_spot().get_spot_id()}"
-        )
-        return fee
+            # Delegate fee calculation to the current fee strategy object
+            fee = self.fee_strategy.calculate_fee(ticket)
+            print(
+                f"Vehicle {license_number} unparked from spot {ticket.get_spot().get_spot_id()}"
+            )
+            return fee

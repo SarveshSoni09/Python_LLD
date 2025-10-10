@@ -1,6 +1,3 @@
-import time
-
-# Assuming your file structure is flat, otherwise adjust imports
 from parking_lot import ParkingLot
 from parking_floor import ParkingFloor
 from parking_spot import ParkingSpot
