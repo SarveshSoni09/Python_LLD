@@ -1,22 +1,26 @@
+# Import the main controller class and the vote type enum for the demo.
 from stack_overflow import StackOverflow
 from vote_type import VoteType
 
 
+# This class demonstrates the functionality of the Stack Overflow system.
 class StackOverflowDemo:
     @staticmethod
     def run():
+        """Executes a step-by-step demonstration of the system's features."""
+
+        # Get the single instance of the StackOverflow system (Singleton pattern).
         so = StackOverflow.get_instance()
         print("Starting Stack Overflow Demo...")
 
-        # 1. Create Users
-        # ---------------------
+        # STEP 1: Create several users to interact with the system.
         print("\n## 1. Creating Users ##")
         user_alice = so.create_user("Alice", "alice@example.com")
         user_bob = so.create_user("Bob", "bob@example.com")
         user_charlie = so.create_user("Charlie", "charlie@example.com")
         print(f"Users created: {user_alice.name}, {user_bob.name}, {user_charlie.name}")
 
-        # Helper function for printing reputations
+        # Helper function to neatly display the current reputation of all users.
         def print_reputations():
             print("--- Reputation Report ---")
             for user in [user_alice, user_bob, user_charlie]:
@@ -25,8 +29,7 @@ class StackOverflowDemo:
 
         print_reputations()
 
-        # 2. Post a Question
-        # ---------------------
+        # STEP 2: A user posts a new question.
         print("\n## 2. Alice Posts a Question ##")
         q1 = so.post_question(
             user_alice.user_id,
@@ -36,8 +39,7 @@ class StackOverflowDemo:
         )
         print(f"'{user_alice.name}' posted: '{q1.title}'")
 
-        # 3. Post an Answer
-        # ---------------------
+        # STEP 3: Another user provides an answer to the question.
         print("\n## 3. Bob Answers the Question ##")
         a1 = so.post_answer(
             user_bob.user_id,
@@ -46,8 +48,7 @@ class StackOverflowDemo:
         )
         print(f"'{user_bob.name}' answered the question.")
 
-        # 4. Post Comments
-        # ---------------------
+        # STEP 4: Users add comments to both the question and the answer.
         print("\n## 4. Users Add Comments ##")
         c1 = so.add_comment(
             user_charlie.user_id, q1.id, "Great question! I was wondering this too."
@@ -57,8 +58,7 @@ class StackOverflowDemo:
         c2 = so.add_comment(user_alice.user_id, a1.id, "Thanks, Bob! That makes sense.")
         print(f"'{user_alice.name}' commented on Bob's ANSWER: '{c2.content}'")
 
-        # 5. Voting and Reputation
-        # ---------------------
+        # STEP 5: Demonstrate the voting system and its effect on user reputation.
         print("\n## 5. Voting and Reputation Changes ##")
         print("Initial state before voting:")
         print_reputations()
@@ -79,8 +79,7 @@ class StackOverflowDemo:
         print_reputations()
         print(f"Bob's answer vote count: {a1.get_vote_count()}")
 
-        # 6. Display Final State
-        # ---------------------
+        # STEP 6: Display a summary of the question, its comments, and answers.
         print("\n## 6. Final State of Alice's Question ##")
         print("=====================================================================")
         print(f"Q: '{q1.title}' by {q1.author.name}")
@@ -102,5 +101,6 @@ class StackOverflowDemo:
         print("\n Demo Complete.")
 
 
+# This standard Python construct ensures the demo runs only when the script is executed directly.
 if __name__ == "__main__":
     StackOverflowDemo.run()

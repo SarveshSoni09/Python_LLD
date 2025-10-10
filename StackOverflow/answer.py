@@ -1,41 +1,23 @@
+# Imports the Post class, which will serve as the base class for this Answer.
 from post import Post
 
 
+# Defines an Answer to a question.
+# An Answer is a type of Post, so it inherits all the properties of a Post
+# (like content, author, votes, comments) and adds its own specific details.
 class Answer(Post):
     def __init__(self, post_id, content, author, question):
+        """
+        Initializes an Answer object.
+
+        Args:
+            post_id: The unique identifier for this answer.
+            content: The text content of the answer.
+            author: The User object who wrote the answer.
+            question: The Question object that this answer is associated with.
+        """
+        # Call the constructor of the parent Post class to initialize common attributes.
         super().__init__(post_id, content, author)
+
+        # Store a reference to the parent question this answer belongs to.
         self.question = question
-        # self.is_accepted = False
-        # self.creation_date = date.today()
-        # self.comments: List[Comment] = []
-        # self.votes = 0
-
-    # def vote(self):
-    #     pass
-
-    # def get_vote_count(self) -> int:
-    #     return self.votes
-
-    # def add_comment(self, comment: Comment):
-    #     self.comments.append(comment)
-
-    # def get_comments(self) -> List[Comment]:
-    #     return self.comments
-
-    # def get_question(self) -> Question:
-    #     return self.question
-
-    # def mark_as_accepted(self):
-    #     self.is_accepted = True
-
-    # def get_id(self) -> str:
-    #     return self.id
-
-    # def get_author(self) -> str:
-    #     return self.author
-
-    # def get_content(self) -> str:
-    #     return self.content
-
-    # def get_is_accepted(self) -> bool:
-    #     return self.is_accepted
