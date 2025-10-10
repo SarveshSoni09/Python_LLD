@@ -1,10 +1,5 @@
-import uuid
-from datetime import date
 from answer import Answer
-from comment import Comment
 from post import Post
-from tag import Tag
-from vote import Vote
 from typing import List
 
 

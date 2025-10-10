@@ -24,4 +24,4 @@ class Post:
             self.comments.append(comment)
 
     def get_vote_count(self):
-        return sum(vote.type.value for vote in self.votes)
+        return sum(vote.vote_type.value for vote in self.votes)

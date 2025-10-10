@@ -1,11 +1,11 @@
 from user import User
 from question import Question
 from answer import Answer
+from comment import Comment
 from vote import Vote
 from vote_type import VoteType
 from tag import Tag
 import threading
-from typing import List
 import uuid
 
 
@@ -80,6 +80,30 @@ class StackOverflow:
         elif vote_type == VoteType.DOWNVOTE:
             post.author.update_reputation(-2)
             user.update_reputation(-1)
+
+    def add_comment(self, author_id, post_id, content):
+        if author_id not in self.users:
+            raise ValueError("User not found.")
+        author = self.users[author_id]
+
+        # Find the post (question or answer)
+        post = self.questions.get(post_id)
+        if not post:
+            for q in self.questions.values():
+                for a in q.answers:
+                    if a.id == post_id:
+                        post = a
+                        break
+                if post:
+                    break
+
+        if not post:
+            raise ValueError("Post not found.")
+
+        comment_id = uuid.uuid4()
+        comment = Comment(comment_id, content, author)
+        post.add_comment(comment)
+        return comment
 
     def search(self, keyword):
         results, keyword_lower = [], keyword.lower()

@@ -1,10 +1,4 @@
-from question import Question
-from comment import Comment
-from vote import Vote
 from post import Post
-from datetime import date
-import uuid
-from typing import List
 
 
 class Answer(Post):
