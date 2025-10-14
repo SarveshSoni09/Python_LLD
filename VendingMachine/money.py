@@ -1,3 +1,4 @@
+# The Money enum provides a clear, encapsulated way to represent different money values.
 from enum import Enum
 
 

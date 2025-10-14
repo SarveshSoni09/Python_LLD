@@ -1,3 +1,4 @@
+# This class follows SRP, only representing a product and its attributes.
 class Product:
     def __init__(self, code: str, name: str, price: float) -> None:
         self.code = code
