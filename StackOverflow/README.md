@@ -23,6 +23,7 @@ The design addresses the following core functional requirements:
 
 The project is organized into modular, single-responsibility files:
 
+```
 /
 |-- user.py # Defines the User class.
 |-- post.py # Defines the Post base class.
@@ -34,6 +35,7 @@ The project is organized into modular, single-responsibility files:
 |-- vote_type.py # Defines the VoteType enumeration.
 |-- stack_overflow.py # The main Singleton controller class for the system.
 |-- stack_overflow_demo.py # The executable script to demonstrate functionality.
+```
 
 ---
 

@@ -25,6 +25,7 @@ The design addresses the following core functional requirements:
 
 The project is organized into modular files, each with a specific responsibility:
 
+```
 /
 |-- product.py # Defines the Product data class.
 |-- inventory.py # Defines the Inventory class to manage products and stock.
@@ -32,6 +33,7 @@ The project is organized into modular files, each with a specific responsibility
 |-- states.py # Defines the abstract VMState and all concrete state classes.
 |-- vending_machine.py # The main Singleton controller class for the system.
 |-- main.py # The executable script to demonstrate functionality.
+```
 
 ---
 
