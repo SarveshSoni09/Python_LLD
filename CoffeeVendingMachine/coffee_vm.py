@@ -1,0 +1,2 @@
+class CoffeeVM:
+    pass
