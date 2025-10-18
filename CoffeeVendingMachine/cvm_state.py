@@ -1,6 +1,4 @@
 from abc import ABC, abstractmethod
-from CoffeeVendingMachine.coffee import Coffee
-from CoffeeVendingMachine.coffee_vm import CoffeeVM
 from inventory import Inventory
 from typing import TYPE_CHECKING
 
@@ -28,18 +26,18 @@ class CVMState(ABC):
 
 
 class ReadyState(CVMState):
-    def select_coffee(self, machine: CoffeeVM, coffee: Coffee):
+    def select_coffee(self, machine: "CoffeeVM", coffee: "Coffee"):
         machine.set_selected_coffee(coffee)
         machine.set_state(SelectingState())
         print(f"{coffee.get_coffee_type()} selected. Price: {coffee.get_price()}")
 
-    def insert_money(self, machine: CoffeeVM, amount: int):
+    def insert_money(self, machine: "CoffeeVM", amount: int):
         print("Please select a coffee first.")
 
-    def dispense_coffee(self, machine: CoffeeVM):
+    def dispense_coffee(self, machine: "CoffeeVM"):
         print("Please select and pay first.")
 
-    def cancel(self, machine: CoffeeVM):
+    def cancel(self, machine: "CoffeeVM"):
         print("Nothing to cancel.")
 
 

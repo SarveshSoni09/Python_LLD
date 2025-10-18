@@ -22,7 +22,7 @@ class CoffeeDecorator(Coffee):
 
 
 class ExtraSugarDecorator(CoffeeDecorator):
-    COST = 10
+    COST = 1
     RECIPE_ADDITION = {Ingredient.SUGAR: 1}
 
     def __init__(self, coffee: Coffee):
@@ -46,7 +46,7 @@ class ExtraSugarDecorator(CoffeeDecorator):
 
 
 class CaramelSyrumDecorator(CoffeeDecorator):
-    COST = 30
+    COST = 2
     RECIPE_ADDITION = {Ingredient.CARAMEL_SYRUP: 10}
 
     def __init__(self, coffee: Coffee):

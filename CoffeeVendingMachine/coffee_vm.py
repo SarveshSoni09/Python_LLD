@@ -1,5 +1,6 @@
 from typing import List
-from typing_extensions import Self
+
+# from typing_extensions import Self
 from enums import CoffeeType, ToppingType
 from coffee import Coffee
 from coffee_maker import CoffeeMaker
