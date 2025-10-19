@@ -4,6 +4,11 @@ import threading
 
 
 class Inventory:
+    """
+    SINGLETON PATTERN: Ensures global, thread-safe access to a single stock manager.
+    SRP: Responsible only for managing ingredient stock levels.
+    """
+
     _instance = None
     _lock = threading.Lock()
 
@@ -29,6 +34,7 @@ class Inventory:
         self._stock[ingredient] = self._stock.get(ingredient, 0) + quantity
 
     def has_ingredients(self, recipe: Dict[Ingredient, int]) -> bool:
+        # Abstraction: Provides a simple interface for checking stock availability.
         return all(
             self._stock.get(ingredient, 0) >= quantity
             for ingredient, quantity in recipe.items()
@@ -41,6 +47,7 @@ class Inventory:
                 return
 
             for ingredient, quantity in recipe.items():
+                # Encapsulation: Direct modification of stock is restricted to this class.
                 self._stock[ingredient] -= quantity
 
     def print_inventory(self):

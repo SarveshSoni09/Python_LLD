@@ -4,6 +4,11 @@ from enums import Ingredient
 
 
 class Coffee(ABC):
+    """
+    ABSTRACT COMPONENT: Defines the interface for all coffee objects,
+    both base types and decorated ones (Decorator Pattern).
+    """
+
     def __init__(self):
         self.coffee_type = "Unknown Coffee"
 
@@ -11,6 +16,8 @@ class Coffee(ABC):
         return self.coffee_type
 
     def prepare(self):
+        """Concrete template for basic preparation steps (Template Method flavor)."""
+
         print(f"\nPreparing your {self.get_coffee_type()}...")
         self._grind_beans()
 
@@ -25,6 +32,7 @@ class Coffee(ABC):
 
     @abstractmethod
     def add_condiments(self):
+        # Template method step to be implemented by subclasses.
         pass
 
     @abstractmethod
@@ -37,6 +45,8 @@ class Coffee(ABC):
 
 
 class Espresso(Coffee):
+    """CONCRETE COMPONENT: The simplest base coffee."""
+
     def __init__(self):
         super().__init__()
         self.coffee_type = "Espresso"
@@ -48,10 +58,13 @@ class Espresso(Coffee):
         return 7
 
     def get_recipe(self) -> Dict[Ingredient, int]:
+        # Encapsulation: Defines its own unique ingredient requirements.
         return {Ingredient.COFFEE_BEANS: 7, Ingredient.WATER: 30}
 
 
 class Latte(Coffee):
+    """CONCRETE COMPONENT: A milk-based coffee."""
+
     def __init__(self):
         super().__init__()
         self.coffee_type = "Latte"
@@ -67,6 +80,8 @@ class Latte(Coffee):
 
 
 class Cappuccino(Coffee):
+    """CONCRETE COMPONENT: A foam-based coffee."""
+
     def __init__(self):
         super().__init__()
         self.coffee_type = "Cappuccino"
