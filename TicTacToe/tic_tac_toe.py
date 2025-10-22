@@ -6,10 +6,16 @@ from invalid_move_exception import InvalidMoveException
 
 
 class TicTacToe:
+    """
+    SINGLETON PATTERN: Ensures only one global instance of the Tic-Tac-Toe system exists.
+    CONTROLLER: Acts as the main interface between the client (Demo) and the core game logic (Game).
+    """
+
     _instance = None
-    _lock = threading.Lock()
+    _lock = threading.Lock()  # Ensures thread-safe instantiation.
 
     def __new__(cls):
+        # Thread-safe Singleton implementation using double-checked locking.
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
@@ -19,7 +25,7 @@ class TicTacToe:
     def __init__(self) -> None:
         if not hasattr(self, "initialized"):
             self.game = None
-            self.scoreboard = Scoreboard()
+            self.scoreboard = Scoreboard()  # Composition: TicTacToe HAS-A Scoreboard.
             self.initialized = True
 
     @classmethod
@@ -27,7 +33,9 @@ class TicTacToe:
         return cls()
 
     def create_game(self, player1: Player, player2: Player):
+        # Factory Method: Creates a new Game object.
         self.game = Game(player1, player2)
+        # Observer Pattern: Attaches the scoreboard to listen for game end events.
         self.game.add_observer(self.scoreboard)
         print(
             f"Game started between {player1.get_name()} (X) and {player2.get_name()} (O)."
@@ -40,12 +48,19 @@ class TicTacToe:
 
         try:
             print(f"{player.get_name()} plays at ({row}, {col})")
+            # Delegation: Pushes the move request down to the Game object.
             self.game.make_move(player, row, col)
             self.print_board()
+
+            # Defensive check and correct getter call (fixing previous bug)
+            winner = self.game.get_winner()
+
             print(f" Game Status: {self.game.get_status().value}")
-            if self.game.get_winner() is not None:
-                print(f"Winner: {self.game.get_winner().get_name()}")
+            if winner is not None:
+                print(f"Winner: {winner.get_name()}")
+
         except InvalidMoveException as e:
+            # Centralized Exception Handling: Catches game-specific errors.
             print(f"Error: {e}")
 
     def print_board(self):

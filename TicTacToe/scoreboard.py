@@ -2,15 +2,21 @@ from game_observer import GameObserver
 
 
 class Scoreboard(GameObserver):
+    """
+    OBSERVER: Updates its internal state (scores) when notified by the Subject (Game).
+    SRP: Responsibility is limited to tracking and displaying scores.
+    """
+
     def __init__(self):
         self.scores = {}
 
     def update(self, game):
+        # Abstraction: Called by the Game (Subject) when the status changes.
         if game.get_winner() is not None:
             winner_name = game.get_winner().get_name()
             self.scores[winner_name] = self.scores.get(winner_name, 0) + 1
             print(
-                f"{Scoreboard} {winner_name} wins! Their new score is {self.scores[winner_name]}."
+                f"Scoreboard: {winner_name} wins! Their new score is {self.scores[winner_name]}."
             )
 
     def print_scores(self):

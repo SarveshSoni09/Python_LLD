@@ -47,6 +47,21 @@ class TicTacToeDemo:
 
         game.print_scoreboard()
 
+        print("--- Testing edge-cases ---")
+        game.create_game(p1, p2)
+        game.print_board()
+        game.make_move(p1, 0, 0)
+        game.make_move(p1, 0, 1)
+        game.make_move(p2, 0, 1)
+        game.make_move(p1, 0, 2)
+        game.make_move(p2, 0, 0)
+        game.make_move(p2, 1, 0)
+        game.make_move(p1, 1, 1)
+        game.make_move(p2, 2, 0)
+        game.make_move(p1, 2, 2)
+        game.make_move(p2, 2, 1)
+        print("-------------------------------------------")
+
 
 if __name__ == "__main__":
     TicTacToeDemo.main()

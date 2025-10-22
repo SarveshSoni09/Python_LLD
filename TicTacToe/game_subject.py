@@ -3,6 +3,11 @@ from game_observer import GameObserver
 
 
 class GameSubject(ABC):
+    """
+    SUBJECT INTERFACE (Observer Pattern): Defines the core methods for managing observers.
+    This promotes Loose Coupling between the Game (Subject) and Scoreboard (Observer).
+    """
+
     def __init__(self):
         self.observers = []
 
@@ -14,4 +19,5 @@ class GameSubject(ABC):
 
     def notify_observers(self):
         for observer in self.observers:
+            # Abstraction: Calls the update method without knowing the observer's internal logic.
             observer.update(self)
