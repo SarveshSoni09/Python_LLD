@@ -36,13 +36,13 @@ class Board:
         return self.moves_count == self.size**2
 
     def print_board(self):
-        print("----------")
+        print("------------")
         for i in range(self.size):
             print("| ", end="")
             for j in range(self.size):
                 symbol = self.board[i][j].get_symbol()
                 print(f"{symbol.get_char()} | ", end="")
-            print("\n----------")
+            print("\n------------")
 
     def get_size(self) -> int:
         return self.size

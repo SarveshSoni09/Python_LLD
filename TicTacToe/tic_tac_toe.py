@@ -1,5 +1,4 @@
 import threading
-from typing_extensions import Self
 from scoreboard import Scoreboard
 from player import Player
 from game import Game
@@ -10,7 +9,7 @@ class TicTacToe:
     _instance = None
     _lock = threading.Lock()
 
-    def __new__(cls) -> Self:
+    def __new__(cls):
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
@@ -44,7 +43,7 @@ class TicTacToe:
             self.game.make_move(player, row, col)
             self.print_board()
             print(f" Game Status: {self.game.get_status().value}")
-            if self.game.get_winner is not None:
+            if self.game.get_winner() is not None:
                 print(f"Winner: {self.game.get_winner().get_name()}")
         except InvalidMoveException as e:
             print(f"Error: {e}")

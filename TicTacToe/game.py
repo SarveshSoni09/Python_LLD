@@ -2,6 +2,7 @@ from game_subject import GameSubject
 from player import Player
 from board import Board
 from enums import GameStatus
+from game_state import GameState
 from game_state import InProgressState
 from win_strategy import RowWinningStrategy, ColWinningStrategy, DiagonalWinningStrategy
 
@@ -17,9 +18,9 @@ class Game(GameSubject):
         self.status = GameStatus.IN_PROGRESS
         self.state = InProgressState()
         self.winning_strategies = [
-            RowWinningStrategy,
-            ColWinningStrategy,
-            DiagonalWinningStrategy,
+            RowWinningStrategy(),
+            ColWinningStrategy(),
+            DiagonalWinningStrategy(),
         ]
 
     def make_move(self, player: Player, row: int, col: int):
@@ -56,3 +57,6 @@ class Game(GameSubject):
         self.status = status
         if status != GameStatus.IN_PROGRESS:
             self.notify_observers()
+
+    def set_state(self, state: GameState):
+        self.state = state

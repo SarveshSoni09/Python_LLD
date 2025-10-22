@@ -12,3 +12,6 @@ class Symbol(Enum):
     X = "X"
     O = "O"
     T = "T"
+
+    def get_char(self):
+        return self.value
