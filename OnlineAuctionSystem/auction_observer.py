@@ -1,0 +1,2 @@
+class AuctionObserver:
+    pass
