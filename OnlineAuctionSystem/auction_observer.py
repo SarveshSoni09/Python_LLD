@@ -1,3 +1,8 @@
+"""
+Defines the 'AuctionObserver' abstract interface, which requires
+any implementing class to have an 'on_update' method.
+"""
+
 from abc import ABC, abstractmethod
 from auction import Auction
 

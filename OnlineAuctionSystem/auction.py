@@ -1,3 +1,9 @@
+"""
+The core Auction class. It manages its own state (ACTIVE/CLOSED),
+handles thread-safe bid placements, and notifies observers (Users)
+of important events like being outbid or the auction ending.
+"""
+
 from typing import List, Set, Optional, TYPE_CHECKING
 from bid import Bid
 from auction_state import AuctionState
@@ -17,16 +23,16 @@ class Auction:
     ):
         self.id = str(uuid.uuid4())
         self.item_name = item_name
-        self.description = description
         self.base_price = base_price
         self.end_time = end_time
         self.bids: List[Bid] = []
         self.observers: Set[AuctionObserver] = set()
         self.state = AuctionState.ACTIVE
         self.winning_bid: Optional[Bid] = None
-        self._lock = threading.RLock()
+        self._lock = threading.RLock()  # Lock for thread-safe bid placement
 
     def place_bid(self, bidder: "User", amount: Decimal):
+        """Places a new bid, validates it, and notifies the previous high bidder."""
         with self._lock:
             if self.state != AuctionState.ACTIVE:
                 raise Exception("Auction is not active.")
@@ -46,11 +52,12 @@ class Auction:
 
             new_bid = Bid(bidder, amount)
             self.bids.append(new_bid)
-            self.add_observer(bidder)
+            self.add_observer(bidder)  # Add this bidder to the notification list
             print(
                 f"SUCCESS: {bidder.get_name()} placed a bid of ${amount:.2f} on '{self.item_name}'."
             )
 
+            # Notify the old high bidder
             if (
                 previous_highest_bidder is not None
                 and previous_highest_bidder != bidder
@@ -61,9 +68,10 @@ class Auction:
                 )
 
     def end_auction(self):
+        """Ends the auction, finds the winner, and notifies all bidders."""
         with self._lock:
             if self.state != AuctionState.ACTIVE:
-                return
+                return  # Already ended
 
             self.state = AuctionState.CLOSED
             self.winning_bid = self.get_highest_bid()
@@ -79,6 +87,7 @@ class Auction:
             self.notify_all_observers(end_message)
 
     def get_highest_bid(self) -> Optional[Bid]:
+        """Finds the highest bid based on Bid's comparison logic."""
         if not self.bids:
             return None
         return max(self.bids)

@@ -1,3 +1,9 @@
+"""
+A simple driver script to demonstrate the auction system.
+It creates users, creates an auction, simulates a bidding war,
+and shows the final results after the auction automatically ends.
+"""
+
 from auction_service import AuctionService
 from user import User
 from auction import Auction
@@ -11,7 +17,10 @@ import time
 class AuctionSystemDemo:
     @staticmethod
     def main():
+        # Get the singleton service
         auction_service = AuctionService.get_instance()
+
+        # Create users
         art3mis = auction_service.create_user("Art3mis")
         parzival = auction_service.create_user("Parzival")
         plaidt = auction_service.create_user("PlaidThunder")
@@ -20,6 +29,7 @@ class AuctionSystemDemo:
         print("        Online Auction System Demo        ")
         print("==========================================")
 
+        # Create an auction
         auction_duration_seconds = 10
         end_time = datetime.now() + timedelta(seconds=auction_duration_seconds)
         aot_auction = auction_service.create_auction(
@@ -31,6 +41,7 @@ class AuctionSystemDemo:
         print()
 
         def try_place_bid(auction_id: str, user_id: str, amount: Decimal):
+            """Helper to place bids and print errors."""
             try:
                 auction_service.place_bid(auction_id, user_id, amount)
             except (ValueError, Exception) as e:
@@ -38,6 +49,7 @@ class AuctionSystemDemo:
                     f"FAILED: {auction_service.get_user(user_id).get_name()} bid of ${amount:.2f}: {e}"
                 )
 
+        # Simulate bidding
         try_place_bid(aot_auction.get_id(), art3mis.get_id(), Decimal("120.00"))
         time.sleep(0.5)
 
@@ -65,6 +77,7 @@ class AuctionSystemDemo:
         print("\n--- Post Auction Information ---")
         ended_auction = auction_service.get_auction(aot_auction.get_id())
 
+        # Print results
         if ended_auction.get_winning_bid() is not None:
             print(
                 f"Auction Winner: {ended_auction.get_winning_bid().get_bidder().get_name()}"
@@ -77,6 +90,7 @@ class AuctionSystemDemo:
         for bid in ended_auction.get_bid_history():
             print(bid)
 
+        # Test bidding on ended auction
         print("\n--- Attempting to bid on an ended auction ---")
         try:
             auction_service.place_bid(

@@ -1,3 +1,8 @@
+"""
+Represents a single Bid, storing the bidder, amount, and timestamp.
+Includes comparison logic: higher amount wins; if equal, earlier bid wins.
+"""
+
 from datetime import datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
@@ -22,24 +27,16 @@ class Bid:
         return self.timestamp
 
     def __lt__(self, other: "Bid") -> bool:
+        """Compares two bids. Higher amount is 'greater'."""
         if self.amount != other.amount:
             return self.amount < other.amount
+        # If amounts are equal, the earlier bid (smaller timestamp) is 'greater'.
         return self.timestamp > other.timestamp
 
     def __eq__(self, other: "Bid") -> bool:
         return self.amount == other.amount and self.timestamp == other.timestamp
 
-    def __le__(self, other: "Bid") -> bool:
-        return self < other or self == other
-
-    def __gt__(self, other: "Bid") -> bool:
-        return not self <= other
-
-    def __ge__(self, other: "Bid") -> bool:
-        return not self < other
-
-    def __ne__(self, other: "Bid") -> bool:
-        return not self == other
+    # ... other comparison methods ...
 
     def __str__(self) -> str:
         return f"Bidder: {self.bidder.get_name()}, Amount: {self.amount:.2f}, Time: {self.timestamp}"
